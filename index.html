@@ -1,0 +1,2280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alan Turing: Life, Code, and the Truth About His Death</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f3eee2;
+      --muted: #b8ae9e;
+      --paper: #171a18;
+      --wash: #0d100f;
+      --line: rgba(211, 194, 151, 0.22);
+      --rust: #c66b55;
+      --blue: #7fb7c4;
+      --green: #64d98a;
+      --gold: #d2b36d;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.46);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(100, 217, 138, 0.14), transparent 38%),
+        linear-gradient(180deg, rgba(7, 9, 9, 0.96), rgba(14, 16, 15, 0.98)),
+        repeating-linear-gradient(90deg, rgba(210, 179, 109, 0.035) 0 1px, transparent 1px 38px);
+      line-height: 1.55;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    a {
+      color: #9ed8e5;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.68fr);
+      gap: 44px;
+      align-items: center;
+      padding: 44px 0 34px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .language-switch {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      display: inline-flex;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid rgba(210, 179, 109, 0.24);
+      border-radius: 8px;
+      background: rgba(8, 11, 10, 0.86);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .lang-btn.is-active {
+      background: #d2b36d;
+      color: #111513;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+      line-height: 1.02;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.2rem, 8vw, 6.8rem);
+      font-weight: 700;
+      color: #fff8e8;
+      text-shadow: 0 12px 36px rgba(0, 0, 0, 0.62);
+    }
+
+    .hero-subtitle {
+      max-width: 760px;
+      margin: 12px 0 0;
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.35rem, 3vw, 2.4rem);
+      line-height: 1.12;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 20px 0 0;
+      color: #d7cebf;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+    }
+
+    .focus-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 680px;
+      margin-top: 18px;
+    }
+
+    .focus-summary span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid rgba(210, 179, 109, 0.22);
+      border-radius: 999px;
+      background: rgba(210, 179, 109, 0.07);
+      color: #eadfc9;
+      font-family: "Courier New", monospace;
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+
+    .hero-actions {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+      width: fit-content;
+    }
+
+    .button-link,
+    .rotor-btn,
+    .reset-game {
+      min-height: 44px;
+      border: 1px solid rgba(210, 179, 109, 0.22);
+      border-radius: 8px;
+      background: rgba(23, 26, 24, 0.9);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 22px;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .start-link {
+      min-height: 56px;
+      min-width: 190px;
+      font-size: 1.05rem;
+      box-shadow: 0 0 30px rgba(210, 179, 109, 0.12);
+    }
+
+    .start-hint {
+      color: var(--muted);
+      font-family: "Courier New", monospace;
+      font-size: 0.86rem;
+    }
+
+    .button-link.primary {
+      background: #d2b36d;
+      color: #111513;
+      border-color: #d2b36d;
+    }
+
+    .button-link:hover,
+    .rotor-btn:hover,
+    .reset-game:hover {
+      transform: translateY(-2px);
+      border-color: rgba(100, 217, 138, 0.62);
+    }
+
+    .portrait-wrap {
+      position: relative;
+      min-height: 490px;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      border-left: 1px solid var(--line);
+      padding: 28px;
+    }
+
+    .portrait-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 5% -8% auto auto;
+      width: 78%;
+      aspect-ratio: 1;
+      background:
+        linear-gradient(135deg, rgba(210, 179, 109, 0.2), rgba(100, 217, 138, 0.07));
+      border: 1px solid rgba(210, 179, 109, 0.14);
+      transform: rotate(-8deg);
+    }
+
+    .portrait {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 360px);
+      aspect-ratio: 1;
+      object-fit: cover;
+      justify-self: center;
+      border: 1px solid rgba(210, 179, 109, 0.34);
+      box-shadow: var(--shadow);
+      filter: grayscale(100%) contrast(1.16) sepia(12%);
+    }
+
+    .caption {
+      position: relative;
+      z-index: 1;
+      max-width: 360px;
+      margin: 16px auto 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .source-note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    section {
+      padding: 52px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    #conclusion {
+      position: relative;
+      overflow: hidden;
+      margin-inline: -18px;
+      padding-inline: 18px;
+      border: 1px solid rgba(210, 179, 109, 0.16);
+      border-radius: 8px;
+      background: rgba(8, 11, 10, 0.42);
+    }
+
+    #conclusion::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(13, 16, 15, 0.96) 0 30%, rgba(13, 16, 15, 0.78) 56%, rgba(13, 16, 15, 0.34) 100%),
+        url("assets/archive-kings-report-1954.jpg") 82% center / auto 118% no-repeat;
+      opacity: 0.86;
+      filter: sepia(0.24) contrast(1.08);
+      pointer-events: none;
+    }
+
+    #conclusion > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.4fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: #f6df9f;
+    }
+
+    .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+      max-width: 760px;
+    }
+
+    .lede-line {
+      display: block;
+    }
+
+    .lede-line + .lede-line {
+      margin-top: 4px;
+    }
+
+    #life .section-header,
+    #background .section-header,
+    #game .section-header,
+    #conclusion .section-header {
+      display: block;
+      max-width: 900px;
+    }
+
+    #life h2,
+    #background h2,
+    #game h2,
+    #conclusion h2 {
+      margin-bottom: 12px;
+      white-space: nowrap;
+    }
+
+    #conclusion .lede {
+      color: #f3eee2;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.18rem, 2.4vw, 1.72rem);
+      line-height: 1.2;
+      max-width: 820px;
+      text-shadow: 0 14px 34px rgba(0, 0, 0, 0.72);
+    }
+
+    .theater {
+      padding: 24px;
+      border: 1px solid rgba(100, 217, 138, 0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(16, 20, 18, 0.96), rgba(8, 11, 10, 0.98)),
+        repeating-linear-gradient(0deg, rgba(210, 179, 109, 0.03) 0 1px, transparent 1px 34px);
+      box-shadow: var(--shadow);
+    }
+
+    .theater-progress {
+      width: fit-content;
+      margin-bottom: 14px;
+      padding: 6px 10px;
+      border: 1px solid rgba(210, 179, 109, 0.24);
+      border-radius: 8px;
+      color: var(--gold);
+      font-family: "Courier New", monospace;
+      font-size: 0.86rem;
+    }
+
+    .theater h3 {
+      color: #fff8e8;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+    }
+
+    .theater-scenario {
+      max-width: 880px;
+      margin: 16px 0 0;
+      color: #d7cebf;
+      font-size: 1.06rem;
+    }
+
+    .truth-note {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid rgba(210, 179, 109, 0.52);
+      border-left: 7px solid var(--gold);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(210, 179, 109, 0.18), rgba(210, 179, 109, 0.06)),
+        rgba(9, 12, 11, 0.92);
+      color: #fff2c8;
+      box-shadow: inset 0 0 24px rgba(210, 179, 109, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.2);
+      font-family: "Courier New", monospace;
+      font-weight: 900;
+    }
+
+    .theater-choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .sim-choice,
+    .theater-nav-btn {
+      min-height: 58px;
+      padding: 16px;
+      border: 1px solid rgba(210, 179, 109, 0.24);
+      border-radius: 8px;
+      background: rgba(23, 26, 24, 0.9);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .sim-choice:hover,
+    .theater-nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: rgba(100, 217, 138, 0.62);
+    }
+
+    .sim-choice.is-selected {
+      border-color: rgba(100, 217, 138, 0.74);
+      background: rgba(100, 217, 138, 0.11);
+    }
+
+    .sim-choice[disabled] {
+      cursor: default;
+      opacity: 0.92;
+    }
+
+    .sim-choice[hidden] {
+      display: none;
+    }
+
+    .sim-choice strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--gold);
+    }
+
+    .truth-tag {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 10px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(100, 217, 138, 0.28);
+      color: #9cf7ad;
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .truth-tag.counterfactual {
+      border-color: rgba(198, 107, 85, 0.32);
+      color: #e69a86;
+    }
+
+    .truth-tag.simulation {
+      border-color: rgba(210, 179, 109, 0.3);
+      color: #f0d28a;
+    }
+
+    .theater-feedback {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(198, 107, 85, 0.34);
+      border-left: 6px solid var(--rust);
+      border-radius: 8px;
+      background: rgba(198, 107, 85, 0.1);
+      color: #efe6d8;
+    }
+
+    .theater-nav {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .theater-nav-btn {
+      min-height: 42px;
+      padding: 10px 14px;
+      color: var(--gold);
+      font-family: "Courier New", monospace;
+      font-size: 0.86rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .theater-nav-btn:disabled {
+      cursor: default;
+      opacity: 0.38;
+    }
+
+    .theater-nav-btn[hidden] {
+      display: none;
+    }
+
+    .life-timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+      padding-top: 42px;
+    }
+
+    .life-timeline::before {
+      content: "";
+      position: absolute;
+      top: 42px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(210, 179, 109, 0.52), transparent);
+    }
+
+    .timeline-card {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      padding-top: 8px;
+    }
+
+    .timeline-date {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      width: fit-content;
+      margin-bottom: -6px;
+      padding: 5px 11px;
+      border: 1px solid rgba(210, 179, 109, 0.34);
+      border-radius: 999px;
+      background: #111513;
+      color: var(--gold);
+      font-family: "Courier New", monospace;
+      font-size: 0.96rem;
+      font-weight: 900;
+      transform: translateY(-26px);
+      box-shadow: 0 0 22px rgba(210, 179, 109, 0.12);
+    }
+
+    .timeline-card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid rgba(210, 179, 109, 0.24);
+      border-radius: 8px;
+      filter: grayscale(100%) contrast(1.18) sepia(18%) brightness(0.78);
+    }
+
+    .timeline-card h3 {
+      color: #fff8e8;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.25rem, 2vw, 1.65rem);
+    }
+
+    .timeline-card p {
+      margin: 10px 0 0;
+      color: #d7cebf;
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .record p,
+    .source-card p,
+    .game-card p {
+      margin: 10px 0 0;
+      color: #c1b8a8;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: minmax(0, 0.74fr) minmax(280px, 0.5fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .enigma-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid rgba(100, 217, 138, 0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(14, 20, 17, 0.98), rgba(8, 11, 10, 0.98));
+      color: #e9f7eb;
+      box-shadow: var(--shadow);
+    }
+
+    .enigma-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(8, 11, 10, 0.84) 0 30%, rgba(8, 11, 10, 0.42) 58%, rgba(8, 11, 10, 0.64)),
+        url("assets/archive-manuscript-page.jpg") center center / cover no-repeat;
+      filter: grayscale(100%) sepia(24%) contrast(1.28) brightness(1.08);
+      opacity: 0.78;
+    }
+
+    .enigma-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, rgba(100, 217, 138, 0.045) 0 1px, transparent 1px 18px),
+        linear-gradient(180deg, transparent, rgba(8, 11, 10, 0.34));
+      mix-blend-mode: screen;
+      opacity: 0.5;
+    }
+
+    .enigma-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .enigma-panel.is-unlocked {
+      animation: panel-unlock 900ms ease;
+      border-color: rgba(100, 217, 138, 0.72);
+    }
+
+    .enigma-panel h3 {
+      color: #e9f7eb;
+    }
+
+    .case-file-label {
+      width: fit-content;
+      margin-bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(198, 107, 85, 0.55);
+      border-radius: 4px;
+      background: rgba(8, 11, 10, 0.72);
+      color: #f1a08d;
+      font-family: "Courier New", monospace;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      box-shadow: 0 0 24px rgba(198, 107, 85, 0.12);
+    }
+
+    .rotor-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .rotor-box {
+      width: min(180px, 100%);
+      padding: 16px;
+      border: 1px solid rgba(100, 217, 138, 0.26);
+      border-radius: 8px;
+      background: #151c18;
+      text-align: center;
+    }
+
+    .rotor-label {
+      color: rgba(233, 247, 235, 0.72);
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .rotor-val {
+      margin: 10px 0;
+      font-family: "Courier New", monospace;
+      font-size: 3rem;
+      line-height: 1;
+      color: #66f28a;
+      text-shadow: 0 0 14px rgba(102, 242, 138, 0.38);
+    }
+
+    .rotor-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .rotor-btn,
+    .reset-game {
+      padding: 10px;
+      font-weight: 900;
+      background: #243129;
+      color: #e9f7eb;
+      border-color: rgba(233, 247, 235, 0.24);
+    }
+
+    .machine-status {
+      min-height: 54px;
+      margin: 18px 0 0;
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(102, 242, 138, 0.08);
+      border: 1px solid rgba(102, 242, 138, 0.18);
+      color: #9cf7ad;
+      font-family: "Courier New", monospace;
+    }
+
+    .decrypt-reward {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      min-width: min(330px, calc(100% - 40px));
+      min-height: 72px;
+      padding: 14px 18px;
+      border: 1px solid rgba(100, 217, 138, 0.78);
+      border-radius: 8px;
+      background: rgba(7, 12, 9, 0.9);
+      color: #b8ffc7;
+      box-shadow: 0 0 38px rgba(100, 217, 138, 0.24), inset 0 0 28px rgba(100, 217, 138, 0.08);
+      font-family: "Courier New", monospace;
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .decrypt-reward.is-visible {
+      animation: reward-pop 820ms ease forwards;
+    }
+
+    .game-instruction {
+      max-width: 760px;
+      margin: 16px auto 0;
+      color: rgba(216, 207, 191, 0.72);
+      font-family: "Courier New", monospace;
+      font-size: 0.86rem;
+      text-align: center;
+    }
+
+    .unlock-meter {
+      margin-top: 14px;
+      color: var(--muted);
+      font-family: "Courier New", monospace;
+    }
+
+    .clue-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .clue-box {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-left: 6px solid #6b6254;
+      border-radius: 8px;
+      background: rgba(20, 24, 21, 0.78);
+      transition: background 180ms ease, border-color 180ms ease;
+    }
+
+    .clue-box.is-active {
+      border-left-color: var(--green);
+      background: rgba(100, 217, 138, 0.12);
+    }
+
+    .clue-box.is-revealed {
+      animation: clue-reveal 900ms ease;
+    }
+
+    .clue-title {
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 0.92rem;
+    }
+
+    .clue-box.is-active .clue-title {
+      color: var(--green);
+    }
+
+    .clue-text {
+      margin-top: 8px;
+      color: #817969;
+      font-family: "Courier New", monospace;
+      letter-spacing: 2px;
+    }
+
+    .clue-box.is-active .clue-text {
+      color: #f3eee2;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .case-conclusion {
+      margin-top: 12px;
+      padding: 16px;
+      border: 1px solid rgba(198, 107, 85, 0.34);
+      border-radius: 8px;
+      background: rgba(198, 107, 85, 0.1);
+    }
+
+    .case-conclusion strong {
+      color: var(--rust);
+    }
+
+    .bombe-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(3, 5, 5, 0.72);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+    }
+
+    .bombe-modal.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bombe-dialog {
+      position: relative;
+      width: min(760px, 100%);
+      min-height: 420px;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      border: 1px solid rgba(210, 179, 109, 0.38);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(5, 8, 7, 0.18), rgba(5, 8, 7, 0.9)),
+        url("assets/二戰解碼機器.jpg") center / cover no-repeat;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.68);
+      transform: translateY(18px) scale(0.97);
+      transition: transform 190ms ease;
+    }
+
+    .bombe-modal.is-visible .bombe-dialog {
+      transform: translateY(0) scale(1);
+      animation: archive-reveal 420ms ease;
+    }
+
+    .bombe-dialog::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(8, 11, 10, 0.9) 0 42%, rgba(8, 11, 10, 0.28) 72%),
+        repeating-linear-gradient(0deg, rgba(210, 179, 109, 0.04) 0 1px, transparent 1px 28px);
+    }
+
+    .bombe-content {
+      position: relative;
+      max-width: 560px;
+      padding: 30px;
+    }
+
+    .bombe-content .eyebrow {
+      margin-bottom: 10px;
+    }
+
+    .bombe-content h3 {
+      color: #fff8e8;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+    }
+
+    .bombe-content p {
+      margin: 14px 0 0;
+      color: #eadfc9;
+      font-size: 1.04rem;
+    }
+
+    .bombe-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      min-width: 42px;
+      min-height: 42px;
+      border: 1px solid rgba(210, 179, 109, 0.34);
+      border-radius: 8px;
+      background: rgba(5, 8, 7, 0.78);
+      color: #f6df9f;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    @keyframes archive-reveal {
+      0% {
+        filter: brightness(0.7) blur(2px);
+      }
+      100% {
+        filter: brightness(1) blur(0);
+      }
+    }
+
+    @keyframes panel-unlock {
+      0% {
+        box-shadow: var(--shadow);
+      }
+      38% {
+        box-shadow: 0 0 0 1px rgba(100, 217, 138, 0.32), 0 0 48px rgba(100, 217, 138, 0.26);
+      }
+      100% {
+        box-shadow: var(--shadow);
+      }
+    }
+
+    @keyframes reward-pop {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.88);
+      }
+      18% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      68% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -62%) scale(0.98);
+      }
+    }
+
+    @keyframes clue-reveal {
+      0% {
+        transform: translateX(0);
+      }
+      18% {
+        transform: translateX(4px);
+        box-shadow: 0 0 28px rgba(100, 217, 138, 0.18);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .final-enigma {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      max-width: 980px;
+      margin-inline: auto;
+    }
+
+    .enigma-seal {
+      display: grid;
+      grid-template-columns: minmax(120px, 0.24fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 20px 22px;
+      border: 1px solid rgba(210, 179, 109, 0.24);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(210, 179, 109, 0.1), transparent 44%),
+        rgba(18, 21, 18, 0.72);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .enigma-seal .seal-mark {
+      font-family: "Courier New", monospace;
+      font-size: clamp(2.4rem, 7vw, 4.8rem);
+      line-height: 0.9;
+      color: var(--gold);
+      text-shadow: none;
+    }
+
+    .report-date {
+      display: grid;
+      gap: 8px;
+    }
+
+    .report-label {
+      color: var(--muted);
+      font-family: "Courier New", monospace;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .enigma-seal ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .enigma-seal li {
+      padding: 8px 10px;
+      border: 1px solid rgba(210, 179, 109, 0.18);
+      border-radius: 999px;
+      background: rgba(8, 11, 10, 0.34);
+      color: #d7cebf;
+      font-size: 0.92rem;
+    }
+
+    .conclusion-card {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(248, 239, 214, 0.04), transparent 120px),
+        rgba(18, 21, 18, 0.78);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .conclusion-card p {
+      margin: 0;
+      color: #d7cebf;
+      font-size: 1.04rem;
+    }
+
+    .death-fact-table {
+      display: grid;
+      gap: 0;
+      margin-bottom: 22px;
+      border: 1px solid rgba(210, 179, 109, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .death-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.36fr) minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 12px 14px;
+      border: 0;
+      border-bottom: 1px solid rgba(210, 179, 109, 0.14);
+      background: rgba(8, 11, 10, 0.32);
+    }
+
+    .death-row:last-child {
+      border-bottom: 0;
+    }
+
+    .death-row span {
+      color: var(--gold);
+      font-family: "Courier New", monospace;
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .death-row strong {
+      color: #f3eee2;
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .conclusion-card p + p {
+      margin-top: 16px;
+    }
+
+    .conclusion-card .closing-line {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+    }
+
+    .turing-interlude {
+      padding: 38px 0;
+    }
+
+    .interlude-frame {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.42fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+      padding: 22px;
+      border: 1px solid rgba(210, 179, 109, 0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(20, 24, 21, 0.92), rgba(8, 11, 10, 0.76)),
+        repeating-linear-gradient(0deg, rgba(210, 179, 109, 0.035) 0 1px, transparent 1px 28px);
+      box-shadow: var(--shadow);
+    }
+
+    .interlude-frame img {
+      width: 100%;
+      max-height: 330px;
+      object-fit: cover;
+      object-position: 50% 38%;
+      border: 1px solid rgba(210, 179, 109, 0.28);
+      filter: grayscale(100%) contrast(1.18) sepia(16%);
+    }
+
+    .interlude-caption {
+      max-width: 620px;
+    }
+
+    .interlude-caption h2 {
+      font-size: clamp(1.7rem, 3vw, 2.7rem);
+    }
+
+    .interlude-caption p {
+      margin: 14px 0 0;
+      color: #d7cebf;
+      font-size: 1.06rem;
+    }
+
+    .replay-bombe {
+      margin-top: 18px;
+      min-height: 40px;
+      padding: 9px 13px;
+      border: 1px solid rgba(210, 179, 109, 0.28);
+      border-radius: 8px;
+      background: rgba(8, 11, 10, 0.58);
+      color: var(--gold);
+      cursor: pointer;
+      font-family: "Courier New", monospace;
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
+
+    .replay-bombe:hover {
+      border-color: rgba(100, 217, 138, 0.58);
+      color: #dff7d7;
+    }
+
+    .replay-bombe[hidden] {
+      display: none;
+    }
+
+    .reference-list {
+      display: grid;
+      gap: 12px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .reference-list li {
+      padding-left: 2rem;
+      text-indent: -2rem;
+      color: #d6ccbd;
+    }
+
+    .source-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20, 24, 21, 0.78);
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .source-card h3 {
+      font-size: 1.05rem;
+    }
+
+    footer {
+      padding: 26px 0 44px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 850px) {
+      .hero,
+      .section-header,
+      .game-board,
+      .final-enigma,
+      .interlude-frame {
+        grid-template-columns: 1fr;
+      }
+
+      .enigma-seal {
+        grid-template-columns: 1fr;
+      }
+
+      .portrait-wrap {
+        min-height: auto;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .theater-choices,
+      .source-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .life-timeline {
+        grid-template-columns: 1fr;
+        gap: 22px;
+        padding-top: 0;
+      }
+
+      .life-timeline::before {
+        display: none;
+      }
+
+      .timeline-card {
+        grid-template-columns: 1fr;
+        padding-top: 0;
+      }
+
+      .timeline-date {
+        margin-bottom: 0;
+        transform: none;
+      }
+
+      .timeline-card img,
+      .timeline-card > div {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .enigma-panel::before {
+        background:
+          linear-gradient(180deg, rgba(8, 11, 10, 0.82), rgba(8, 11, 10, 0.58)),
+          url("assets/archive-manuscript-page.jpg") center top / cover no-repeat;
+        opacity: 0.62;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 22px, 1120px);
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 28px;
+      }
+
+      .rotor-group {
+        display: grid;
+      }
+
+      .death-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="language-switch" aria-label="Language">
+    <button class="lang-btn is-active" type="button" id="lang-en">English</button>
+    <button class="lang-btn" type="button" id="lang-zh">繁中</button>
+  </div>
+  <main class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Interactive history report</p>
+        <h1>Alan Turing</h1>
+        <p class="hero-subtitle">A brilliant life, a hidden war, and a tragic truth.</p>
+        <p class="hero-copy">
+          Explore Alan Turing's life, achievements, and the pressures that shaped his world.
+          Through interactive decoding, you will see why his death still resists a simple answer.
+        </p>
+        <div class="focus-summary" aria-label="Project focus">
+          <span id="focus-one">Focus: social obstacles</span>
+          <span id="focus-two">Unsolved: Turing's death</span>
+        </div>
+        <div class="hero-actions">
+          <a class="button-link primary start-link" href="#life">Start</a>
+          <div class="start-hint">Open the archive and enter 1912.</div>
+        </div>
+      </div>
+      <figure class="portrait-wrap">
+        <img class="portrait" src="assets/turing-portrait.png" alt="Portrait of Alan Turing" />
+        <figcaption class="caption">
+          Alan Mathison Turing, 1912-1954. A mathematician, cryptanalyst, and pioneer of computer science.
+        </figcaption>
+      </figure>
+    </header>
+
+    <section id="life">
+      <div class="section-header">
+        <h2>Life Story</h2>
+        <p class="lede">
+          Three moments shaped the story: Turing's birth, his idea of the Turing machine, and his wartime codebreaking.
+        </p>
+      </div>
+
+      <div class="life-timeline" aria-label="Alan Turing timeline">
+        <article class="timeline-card" data-story="birth">
+          <span class="timeline-date">1912</span>
+          <img src="assets/turing-child.jpg" alt="Alan Turing as a child" />
+          <div>
+            <h3>Born in London</h3>
+            <p>His childhood curiosity grew into a lifelong talent for mathematics and science.</p>
+          </div>
+        </article>
+
+        <article class="timeline-card" data-story="machine">
+          <span class="timeline-date">1936</span>
+          <img src="assets/enigma-turing.jpeg" alt="Alan Turing beside an Enigma machine image" />
+          <div>
+            <h3>The Turing Machine</h3>
+            <p>He described a universal model of computation before modern computers existed.</p>
+          </div>
+        </article>
+
+        <article class="timeline-card" data-story="enigma">
+          <span class="timeline-date">1939-1941</span>
+          <img src="assets/bletchley-park.jpeg" alt="Bletchley Park, wartime codebreaking center" />
+          <div>
+            <h3>Bletchley Park</h3>
+            <p>His work with colleagues made machine-assisted Enigma decryption faster and more reliable.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="background">
+      <div class="section-header">
+        <h2>Historical Background</h2>
+        <p class="lede">
+          Step into four pressures that shaped Turing's world: wartime bureaucracy,
+          intelligence secrecy, machine intelligence, and criminalized identity.
+        </p>
+      </div>
+
+      <div class="theater" aria-live="polite">
+        <div class="theater-progress" id="theater-progress">Dilemma 1 of 4</div>
+        <h3 id="theater-title">The Bombe and Bureaucracy</h3>
+        <p class="theater-scenario" id="theater-scenario"></p>
+        <div class="truth-note" id="theater-urgent"></div>
+        <div class="theater-choices">
+          <button class="sim-choice" type="button" data-option="a" id="choice-a"></button>
+          <button class="sim-choice" type="button" data-option="b" id="choice-b"></button>
+        </div>
+        <div class="theater-feedback" id="theater-feedback" hidden></div>
+        <div class="theater-nav" aria-label="Historical background navigation">
+          <button class="theater-nav-btn" type="button" id="prev-dilemma">Previous</button>
+          <button class="theater-nav-btn" type="button" id="review-dilemma" hidden>Review choices</button>
+          <button class="theater-nav-btn" type="button" id="next-dilemma">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="game">
+      <div class="section-header">
+        <h2>Enigma Evidence</h2>
+        <p class="lede">
+          <span class="lede-line">Operate the two rotors to unlock three historical explanations for Turing's death.</span>
+          <span class="lede-line">Use the + and - buttons to set both rotors from 1 to 5. Match the file codes to unlock one evidence file at a time.</span>
+        </p>
+      </div>
+
+      <div class="game-board">
+        <div class="enigma-panel">
+          <div class="case-file-label" id="case-file-label">Locked archive file</div>
+          <div class="decrypt-reward" id="decrypt-reward" aria-hidden="true">File decrypted</div>
+          <h3>Cipher console</h3>
+          <p class="source-note">Try the file codes: 1-3, 2-4, and 5-1.</p>
+          <div class="rotor-group">
+            <div class="rotor-box">
+              <div class="rotor-label">Rotor I</div>
+              <div class="rotor-val" id="rotor-a">1</div>
+              <div class="rotor-controls">
+                <button class="rotor-btn" type="button" data-rotor="a" data-delta="-1" aria-label="Decrease rotor one">-</button>
+                <button class="rotor-btn" type="button" data-rotor="a" data-delta="1" aria-label="Increase rotor one">+</button>
+              </div>
+            </div>
+            <div class="rotor-box">
+              <div class="rotor-label">Rotor II</div>
+              <div class="rotor-val" id="rotor-b">1</div>
+              <div class="rotor-controls">
+                <button class="rotor-btn" type="button" data-rotor="b" data-delta="-1" aria-label="Decrease rotor two">-</button>
+                <button class="rotor-btn" type="button" data-rotor="b" data-delta="1" aria-label="Increase rotor two">+</button>
+              </div>
+            </div>
+          </div>
+          <p class="machine-status" id="machine-status" aria-live="polite">[ Signal searching: no evidence file unlocked ]</p>
+          <div class="unlock-meter" id="unlock-meter">Files unlocked: 0/3</div>
+          <button class="reset-game" type="button" id="reset-rotors">Reset rotors</button>
+        </div>
+        <div class="clue-stack">
+          <div class="clue-box" id="clue-apple">
+            <div class="clue-title">Locked file A: code 1-3</div>
+            <div class="clue-text">%#@&amp;*!$ QX929 POMS</div>
+          </div>
+          <div class="clue-box" id="clue-lab">
+            <div class="clue-title">Locked file B: code 2-4</div>
+            <div class="clue-text">@$!%#*&amp; ZW104 LKJD</div>
+          </div>
+          <div class="clue-box" id="clue-conspiracy">
+            <div class="clue-title">Locked file C: code 5-1</div>
+            <div class="clue-text">&amp;*%#@!$ VR773 QWER</div>
+          </div>
+          <div class="case-conclusion" id="case-conclusion">
+            <strong>Case status:</strong> unlock all three files to complete the investigation.
+          </div>
+        </div>
+      </div>
+      <div class="bombe-modal" id="bombe-modal" role="dialog" aria-modal="true" aria-labelledby="bombe-title" hidden>
+        <div class="bombe-dialog">
+          <button class="bombe-close" type="button" id="bombe-close" aria-label="Close">x</button>
+          <div class="bombe-content">
+            <p class="eyebrow" id="bombe-eyebrow">Archive unlocked</p>
+            <h3 id="bombe-title">The idea behind the machine</h3>
+            <p id="bombe-text">
+              This game is a simplified echo of Turing's wartime Bombe: a machine-assisted way to test possible Enigma settings faster than human hands alone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusion">
+      <div class="section-header">
+        <h2>The Final Enigma</h2>
+        <p class="lede">
+          Some facts are decoded. The human meaning remains harder to read.
+        </p>
+      </div>
+
+      <div class="final-enigma">
+        <aside class="enigma-seal">
+          <div class="report-date">
+            <span class="report-label" id="report-label">Historical report</span>
+            <div class="seal-mark">1954</div>
+          </div>
+          <ul id="conclusion-seal">
+            <li>Cyanide poisoning</li>
+            <li>Poisoned apple</li>
+            <li>Unresolved truth</li>
+          </ul>
+        </aside>
+        <div class="conclusion-card">
+          <div class="death-fact-table" aria-label="Alan Turing death records and interpretations">
+            <div class="death-row">
+              <span id="fact-date-label">Death / discovery</span>
+              <strong id="fact-date-value">Found dead on 8 June 1954; his death is usually dated 7 June 1954.</strong>
+            </div>
+            <div class="death-row">
+              <span id="fact-place-label">Place</span>
+              <strong id="fact-place-value">His home in Wilmslow, Cheshire, England.</strong>
+            </div>
+            <div class="death-row">
+              <span id="fact-record-label">Official record</span>
+              <strong id="fact-record-value">Cyanide poisoning; inquest verdict: suicide.</strong>
+            </div>
+            <div class="death-row">
+              <span id="fact-apple-label">Poisoned apple</span>
+              <strong id="fact-apple-value">The most famous story, but the apple itself was not proven as the direct cause.</strong>
+            </div>
+            <div class="death-row">
+              <span id="fact-accident-label">Accident theory</span>
+              <strong id="fact-accident-value">Some accounts suggest accidental cyanide exposure during experiments, but the official record did not adopt that explanation.</strong>
+            </div>
+            <div class="death-row">
+              <span id="fact-pressure-label">Historical pressure</span>
+              <strong id="fact-pressure-value">Before his death, he had been prosecuted for homosexuality, lost security clearance, and undergone hormonal treatment.</strong>
+            </div>
+          </div>
+          <p id="conclusion-p1"></p>
+          <p id="conclusion-p2"></p>
+          <p id="conclusion-p3"></p>
+          <p class="closing-line" id="conclusion-line"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="turing-interlude" id="turing-image">
+      <div class="interlude-frame">
+        <img src="Truing%20v.s%20Computer.webp" alt="Alan Turing and computer themed image" />
+        <div class="interlude-caption">
+          <h2 id="interlude-title">The person behind the archive</h2>
+          <p id="interlude-copy">
+            He was a mathematician who changed modern computing, and a person deeply harmed by the laws and prejudices of his time.
+          </p>
+          <button class="replay-bombe" type="button" id="replay-bombe" hidden>Review the decoding machine</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="section-header">
+        <h2>Sources</h2>
+      </div>
+      <div class="source-grid">
+        <div class="source-card">
+          <ol class="reference-list">
+            <li>Copeland, B. J. (n.d.). <em>Alan Turing</em>. Encyclopaedia Britannica. <a href="https://www.britannica.com/biography/Alan-Turing">https://www.britannica.com/biography/Alan-Turing</a></li>
+            <li>Copeland, B. J. (Ed.). (2004). <em>The essential Turing: Seminal writings in computing, logic, philosophy, artificial intelligence, and artificial life, plus the secrets of Enigma</em>. Oxford University Press. <a href="B.J.%20Copeland%20(ed.)-%20Alan%20Turing's%20Automatic%20Computing%20Engine-%20The%20Master%20Codebreaker's%20Struggle%20to%20Build%20the%20Modern%20Computer%20(Oxford%20University%20Press-%20Oxford,%202005)%20.pdf">Local PDF</a></li>
+            <li>Bowen, J. P. (2024). <em>The impact of Alan Turing: Formal methods and beyond</em>. Local course archive PDF. <a href="The%20Impact%20of%20Alan%20Turing.pdf">Local PDF</a></li>
+            <li>GCHQ. (2019, July 11). <em>Alan Turing</em>. <a href="https://www.gchq.gov.uk/information/alan-turing">https://www.gchq.gov.uk/information/alan-turing</a></li>
+            <li>Hodges, A. (n.d.). <em>Alan Turing scrapbook: Unseen worlds</em>. Alan Turing: The Enigma. <a href="https://www.turing.org.uk/scrapbook/wondrous.html">https://www.turing.org.uk/scrapbook/wondrous.html</a></li>
+            <li>King's College, Cambridge. (n.d.-a). <em>About Alan Turing</em>. The Turing Digital Archive. <a href="https://turingarchive.kings.cam.ac.uk/about-alan-turing">https://turingarchive.kings.cam.ac.uk/about-alan-turing</a></li>
+            <li>King's College, Cambridge. (n.d.-b). <em>AMT/A/1</em>. The Turing Digital Archive. <a href="https://turingarchive.kings.cam.ac.uk/biographical-and-personal-documents-amta/amt-a-1">https://turingarchive.kings.cam.ac.uk/biographical-and-personal-documents-amta/amt-a-1</a></li>
+            <li>King's College, Cambridge. (n.d.-c). <em>Turing papers manuscript and newspaper images</em>. Local course archive PDFs. <a href="Turing%20%E6%89%8B%E7%A8%BF%20von%20Website.pdf">Local PDF</a>; <a href="Turing%20%E6%89%8B%E7%A8%BF%20von%20website%20-2.pdf">Local PDF</a></li>
+            <li>Ministry of Justice. (2013, December 24). <em>Royal pardon for WW2 code-breaker Dr Alan Turing</em>. GOV.UK. <a href="https://www.gov.uk/government/news/royal-pardon-for-ww2-code-breaker-dr-alan-turing">https://www.gov.uk/government/news/royal-pardon-for-ww2-code-breaker-dr-alan-turing</a></li>
+            <li><em>Alan Mathison Turing (1912-1954)</em>. (n.d.). Local course archive document. <a href="Alan_Mathison_Turing_1912_1954.docx">Local DOCX</a></li>
+            <li><em>Alan Turing</em>. (n.d.). Local course archive document. <a href="Alan_Turing.docx">Local DOCX</a></li>
+            <li><em>Alan Turing</em>. (n.d.). Local course archive PDF. <a href="Alan_Turing.pdf">Local PDF</a></li>
+            <li><em>Alan Turing informative speech</em>. (n.d.). Local course archive document. <a href="Alan_Turing_Informative_speech.docx">Local DOCX</a></li>
+            <li><em>Alan Turing and the decision problem</em>. (n.d.). Local course archive PDF. <a href="Alan_Turing_and_the_Decision_Problem.pdf">Local PDF</a></li>
+            <li>Turing, A. M. (1936). On computable numbers, with an application to the Entscheidungsproblem. <em>Proceedings of the London Mathematical Society, 42</em>(2), 230-265.</li>
+            <li>Turing, A. M. (1937). Computability and λ-definability. <em>The Journal of Symbolic Logic, 2</em>(4), 153-163. <a href="Computability%20and%20%CE%BB-Definability%20(1937)%20-%20%E4%BB%96%E7%9A%84%E8%AB%96%E6%96%87%E8%91%97%E4%BD%9C.pdf">Local PDF</a></li>
+            <li>Turing, A. M. (1950). Computing machinery and intelligence. <em>Mind, 59</em>(236), 433-460. <a href="Computing_Machinery_and_Intelligence_Ala.pdf">Local PDF</a></li>
+            <li>Turing, S. (2012). <em>Alan M. Turing: Centenary edition</em> (M. Davis, Foreword; J. Turing, Afterword). Cambridge University Press. <a href="Cambridge%20University%20Press%20978-1-107-02058-0%20-%20Alan%20M.%20Turing-%20Centenary%20Edition%20Sara%20Turing%20Frontmatter.pdf">Local PDF front matter</a></li>
+            <li>Teuscher, C. (Ed.). (2004). <em>Alan Turing: Life and legacy of a great thinker</em>. Springer. https://doi.org/10.1007/978-3-662-05642-4</li>
+          </ol>
+          <p class="source-note" id="source-image-note">
+            I did not use copyrighted images directly from the online Turing Digital Archive. The visible card images are from files already present in this project.
+          </p>
+          <p class="source-note" id="sources-lede-note">
+            The page uses your local archive first, then adds official or scholarly web sources where the death story needs extra precision.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Built as an interactive history page. Main message: Alan Turing's life was extraordinary, and the
+      injustice he suffered should be stated accurately.
+    </footer>
+  </main>
+
+  <script>
+    let currentLang = "en";
+
+    const uiText = {
+      en: {
+        docLang: "en",
+        heroEyebrow: "Interactive history report",
+        heroTitle: "Alan Turing",
+        heroSubtitle: "A brilliant life, a hidden war, and a tragic truth.",
+        heroCopy: "Explore Alan Turing's life, achievements, and the pressures that shaped his world. Through interactive decoding, you will see why his death still resists a simple answer.",
+        focusSummary: [
+          "Focus: social obstacles",
+          "Unsolved: Turing's death"
+        ],
+        start: "Start",
+        startHint: "Open the archive and enter 1912.",
+        caption: "Alan Mathison Turing, 1912-1954. A mathematician, cryptanalyst, and pioneer of computer science.",
+        backgroundTitle: "Historical Background",
+        backgroundLede: "Step into four pressures that shaped Turing's world: wartime bureaucracy, intelligence secrecy, machine intelligence, and criminalized identity.",
+        lifeTitle: "Life Story",
+        lifeLede: "Three moments shaped the story: Turing's birth, his idea of the Turing machine, and his wartime codebreaking.",
+        cards: {
+          birth: ["1912", "Born in London", "His childhood curiosity grew into a lifelong talent for mathematics and science."],
+          machine: ["1936", "The Turing Machine", "He described a universal model of computation before modern computers existed."],
+          enigma: ["1939-1941", "Bletchley Park", "His work with colleagues made machine-assisted Enigma decryption faster and more reliable."]
+        },
+        gameTitle: "Enigma Evidence",
+        gameLede: [
+          "Operate the two rotors to unlock three historical explanations for Turing's death.",
+          "Use the + and - buttons to set both rotors from 1 to 5. Match the file codes to unlock one evidence file at a time."
+        ],
+        caseFileLabel: "Locked archive file",
+        unlockReward: "File decrypted",
+        caseCompleteReward: "Archive sequence complete",
+        rotorSettings: "Cipher console",
+        rotorHint: "Try the file codes: 1-3, 2-4, and 5-1.",
+        rotorOne: "Rotor I",
+        rotorTwo: "Rotor II",
+        resetRotors: "Reset rotors",
+        signalSearching: "[ Signal searching: current setting does not match an evidence file ]",
+        signalAligned: "File unlocked",
+        filesUnlocked: "Files unlocked",
+        locked: {
+          apple: ["Locked file A: code 1-3", "%#@&*!$ QX929 POMS"],
+          lab: ["Locked file B: code 2-4", "@$!%#*& ZW104 LKJD"],
+          conspiracy: ["Locked file C: code 5-1", "&*%#@!$ VR773 QWER"]
+        },
+        caseStatus: "<strong>Case status:</strong> unlock all three files to reveal the main death explanations.",
+        caseSolved: "<strong>Files opened:</strong> three explanations are now on the table: poisoned apple, accident theory, and unsupported conspiracy. Continue to The Final Enigma to compare time, place, official record, and uncertainty.",
+        bombeEyebrow: "Archive unlocked",
+        bombeTitle: "The idea behind the machine",
+        bombeText: "This game is a simplified echo of Turing's wartime Bombe: a machine-assisted way to test possible Enigma settings faster than human hands alone.",
+        conclusionTitle: "The Final Enigma",
+        conclusionLede: "Some facts are decoded. The human meaning remains harder to read.",
+        reportLabel: "Historical report",
+        conclusionSeal: [
+          "Cyanide poisoning",
+          "Poisoned apple",
+          "Unresolved truth"
+        ],
+        conclusionParagraphs: [
+          "Alan Turing's death remains difficult to describe with complete certainty. The archive gives a clear basic fact: Turing died from cyanide poisoning in 1954, and the official ruling was suicide. The poisoned apple story is famous and often used to explain the scene, but the apple itself was not proven as the cause. That is why this is not just a death record, but an enigma that still resists a complete answer.",
+          "Turing's death also took place after serious personal and institutional pressures. He had been prosecuted for homosexuality, lost security clearance, and underwent hormonal treatment as an alternative to prison. These facts do not prove exactly what he intended, but they are important context for understanding the final years of his life.",
+          "For this reason, Turing's death can be understood as a final Enigma: a case where some facts are known, but the complete meaning remains unresolved. The record allows us to identify the likely cause of death, but it does not fully decode the mixture of accident, personal distress, legal punishment, and social pressure that may have surrounded it."
+        ],
+        conclusionFacts: [
+          ["Death / discovery", "Found dead on 8 June 1954; his death is usually dated 7 June 1954."],
+          ["Place", "His home in Wilmslow, Cheshire, England."],
+          ["Official record", "Cyanide poisoning; inquest verdict: suicide."],
+          ["Poisoned apple", "The most famous story, but the apple itself was not proven as the direct cause."],
+          ["Accident theory", "Some accounts suggest accidental cyanide exposure during experiments, but the official record did not adopt that explanation."],
+          ["Historical pressure", "Before his death, he had been prosecuted for homosexuality, lost security clearance, and undergone hormonal treatment."]
+        ],
+        conclusionLine: "",
+        interludeTitle: "The person behind the archive",
+        interludeCopy: "He was a mathematician who changed modern computing, and a person deeply harmed by the laws and prejudices of his time.",
+        replayBombe: "Review the decoding machine",
+        sourcesTitle: "Sources",
+        sourcesLede: "The page uses your local archive first, then adds official or scholarly web sources where the death story needs extra precision.",
+        sourceNote: "I did not use copyrighted images directly from the online Turing Digital Archive. The visible card images are from files already present in this project.",
+        footer: "Built as an interactive history page. Main message: Alan Turing's life was extraordinary, and the injustice he suffered should be stated accurately.",
+        decision: "Dilemma",
+        of: "of",
+        previous: "Previous",
+        reviewChoices: "Review choices",
+        next: "Next"
+      },
+      zh: {
+        docLang: "zh-Hant",
+        heroEyebrow: "互動式歷史報告",
+        heroTitle: "艾倫・圖靈",
+        heroSubtitle: "一段改變世界的人生、一場隱密的戰爭，以及尚未完全解開的悲劇。",
+        heroCopy: "這個網站帶你認識艾倫・圖靈的生命、成就與時代壓力。你也將透過互動解密，思考他的死亡為何至今仍像一道謎題。",
+        focusSummary: [
+          "焦點：社會阻礙",
+          "未解：圖靈之死"
+        ],
+        start: "開始",
+        startHint: "打開檔案，進入 1912。",
+        caption: "艾倫・馬西森・圖靈（1912-1954）。他是數學家、密碼分析者，也是電腦科學的先驅。",
+        backgroundTitle: "時代背景",
+        backgroundLede: "進入圖靈所處時代的四個困境：戰時官僚、情報保密、機器智能，以及被法律犯罪化的身份。",
+        lifeTitle: "生命故事",
+        lifeLede: "圖靈生命中的三個關鍵時刻：出生、提出圖靈機概念，以及戰時密碼破譯。",
+        cards: {
+          birth: ["1912", "出生於倫敦", "童年的好奇心逐漸發展成他對數學與科學的深厚天分。"],
+          machine: ["1936", "圖靈機", "在現代電腦真正出現之前，他提出了可描述運算本質的抽象模型。"],
+          enigma: ["1939-1941", "布萊切利園", "他與同事的工作讓機器輔助的 Enigma 解密更快速、更可靠。"]
+        },
+        gameTitle: "Enigma 證據解密",
+        gameLede: [
+          "操作兩個轉盤，解鎖歷史上關於圖靈死因的三種說法。",
+          "使用 + 和 - 按鈕，將兩個轉盤設定在 1 到 5 之間，對上檔案密碼後一次解鎖一份證據檔案。"
+        ],
+        caseFileLabel: "鎖定檔案",
+        unlockReward: "檔案解密成功",
+        caseCompleteReward: "檔案序列完成",
+        rotorSettings: "密碼控制台",
+        rotorHint: "試試檔案密碼：1-3、2-4、5-1。",
+        rotorOne: "轉盤 I",
+        rotorTwo: "轉盤 II",
+        resetRotors: "重設轉盤",
+        signalSearching: "[ 訊號搜尋中：目前設定未對應任何證據檔案 ]",
+        signalAligned: "解密成功",
+        filesUnlocked: "已解鎖檔案",
+        locked: {
+          apple: ["鎖定檔案 A：密碼 1-3", "%#@&*!$ QX929 POMS"],
+          lab: ["鎖定檔案 B：密碼 2-4", "@$!%#*& ZW104 LKJD"],
+          conspiracy: ["鎖定檔案 C：密碼 5-1", "&*%#@!$ VR773 QWER"]
+        },
+        caseStatus: "<strong>案件狀態：</strong>解鎖三份檔案，找出主要死因說法。",
+        caseSolved: "<strong>檔案已開啟：</strong>三種說法已經出現：毒蘋果、意外中毒、缺乏證據的陰謀論。請繼續往下到「圖靈的最後一道謎題」，比較時間、地點、官方紀錄與不確定之處。",
+        bombeEyebrow: "檔案解鎖",
+        bombeTitle: "機器背後的概念",
+        bombeText: [
+          "這個小遊戲借用了圖靈在二戰時期參與設計的 Bombe 概念。",
+          "Bombe 會用機器協助測試可能的 Enigma 設定，讓解碼速度比只靠人手更快。"
+        ],
+        conclusionTitle: "圖靈的最後一道謎題",
+        conclusionLede: "有些事實已被解碼，但人的處境與意義，仍然更難讀懂。",
+        reportLabel: "歷史報告",
+        conclusionSeal: [
+          "氰化物中毒",
+          "毒蘋果",
+          "真相未定"
+        ],
+        conclusionParagraphs: [
+          "艾倫・圖靈的死亡至今仍難以用完全確定的方式描述。根據檔案資料，可以確認一個基本事實：圖靈於 1954 年死於氰化物中毒，而官方裁定為自殺。毒蘋果是最著名的故事，也常被用來想像死亡現場；但蘋果本身並沒有被證實為直接死因。也正因如此，這不只是一個死亡紀錄，而是一道至今仍未完全解開的謎。",
+          "圖靈的死亡也發生在嚴重的個人與制度壓力之後。他曾因同性戀身份遭到起訴，被取消接觸機密工作的安全許可，並接受荷爾蒙治療作為替代入獄的懲罰。這些事實不能完全證明他的真實意圖，但它們是理解他生命最後幾年時不可忽略的重要背景。",
+          "因此，圖靈的死亡可以被理解為他的最後一道「謎題」：某些事實是已知的，但完整意義仍未被完全解開。檔案資料讓我們能確認他可能的死因，卻無法完全解讀意外、個人痛苦、法律懲罰與社會壓力之間可能交織出的複雜真相。"
+        ],
+        conclusionFacts: [
+          ["死亡／發現", "1954 年 6 月 8 日被發現死亡；他的死亡日期通常記為 1954 年 6 月 7 日。"],
+          ["地點", "英格蘭 Cheshire 的 Wilmslow 住處。"],
+          ["官方紀錄", "死於氰化物中毒；驗屍結論為自殺。"],
+          ["毒蘋果", "最著名的故事，但蘋果本身沒有被證實為直接死因。"],
+          ["意外說", "也有人認為他可能是在實驗中意外接觸氰化物，但官方紀錄並未採用這個說法。"],
+          ["時代壓力", "在死亡之前，他曾因同性戀身份被起訴、失去接觸機密工作的安全許可，並接受荷爾蒙治療。"]
+        ],
+        conclusionLine: "",
+        interludeTitle: "檔案背後的人",
+        interludeCopy: "他不只是改變現代運算的數學家，也是一個被當時法律與偏見深深傷害的人。",
+        replayBombe: "再看一次解碼機器",
+        sourcesTitle: "資料來源",
+        sourcesLede: "本頁優先使用你的本地檔案，並加入官方或學術性網頁資料，以確保死亡相關敘述更精確。",
+        sourceNote: "我沒有直接使用線上 Turing Digital Archive 中受版權限制的圖片。頁面中可見的卡片圖片都來自這個專案資料夾中已存在的檔案。",
+        footer: "這是一個互動式歷史網頁。核心訊息是：圖靈的一生極其重要，而他遭遇的不公也應被準確地說出來。",
+        decision: "困境",
+        of: "/",
+        previous: "上一頁",
+        reviewChoices: "查看選項",
+        next: "下一頁"
+      }
+    };
+
+    const storyDetails = {
+      birth: {
+        title: "1912: Birth and early talent",
+        text: "Alan Mathison Turing was born on 23 June 1912 in London. The Turing Digital Archive identifies his parents as Julius Mathison Turing and Ethel Sara Turing, and local papers describe his early interest in mathematics, science, and chemistry."
+      },
+      machine: {
+        title: "1936: A model of computation",
+        text: "In 1936, Turing completed the work known as 'On Computable Numbers, with an Application to the Entscheidungsproblem' (published in the 1936-37 Proceedings of the London Mathematical Society). It introduced the abstract machine now called the Turing machine and helped define what computation means."
+      },
+      enigma: {
+        title: "1939-1941: Codebreaking at Bletchley Park",
+        text: "After war began in 1939, Turing joined the Government Code and Cypher School at Bletchley Park. GCHQ says he led work in Hut 8 on German Naval Enigma and that Polish cryptanalytic insights helped him design the Bombe in January 1940. Copeland's archive volume includes wartime material such as 'History of Hut 8 to December 1941,' 'Bombe and Spider,' and a 1941 letter to Winston Churchill. It is more accurate to say he helped break Enigma messages over time than to say he decoded everything alone in 1941."
+      }
+    };
+
+    const storyDetailsZh = {
+      birth: {
+        title: "1912：出生與早期天分",
+        text: "艾倫・馬西森・圖靈於 1912 年 6 月 23 日出生於倫敦。Turing Digital Archive 記載他的父母為 Julius Mathison Turing 與 Ethel Sara Turing；本地資料也描述了他早年對數學、科學與化學的興趣。"
+      },
+      machine: {
+        title: "1936：運算模型",
+        text: "1936 年，圖靈完成〈On Computable Numbers, with an Application to the Entscheidungsproblem〉，該文刊於 1936-37 年的 Proceedings of the London Mathematical Society。它提出後來被稱為圖靈機的抽象模型，也幫助定義了「運算」本身。"
+      },
+      enigma: {
+        title: "1939-1941：布萊切利園的密碼破譯",
+        text: "戰爭爆發後，圖靈加入布萊切利園的 Government Code and Cypher School。GCHQ 指出，他在 Hut 8 領導德國海軍 Enigma 的相關工作，並在波蘭密碼分析成果基礎上設計 Bombe。Copeland 的資料中也收錄了〈History of Hut 8 to December 1941〉、〈Bombe and Spider〉與 1941 年寫給邱吉爾的信。較準確的說法是：他與團隊在一段時間內協助破解 Enigma 訊息，而不是他在 1941 年單獨破譯一切。"
+      }
+    };
+
+    const clueFiles = {
+      "1-3": {
+        key: "apple",
+        title: "Claim A: poisoned apple",
+        text: "The famous story says Turing died after eating an apple laced with cyanide."
+      },
+      "2-4": {
+        key: "lab",
+        title: "Claim B: laboratory accident",
+        text: "Another interpretation asks whether cyanide exposure could have been accidental."
+      },
+      "5-1": {
+        key: "conspiracy",
+        title: "Claim C: conspiracy theory",
+        text: "A darker claim suggests murder because Turing knew wartime secrets, but this lacks strong evidence."
+      }
+    };
+
+    const clueFilesZh = {
+      "1-3": {
+        key: "apple",
+        title: "說法 A：毒蘋果",
+        text: "最著名的故事認為，圖靈吃下了沾有氰化物的蘋果而死亡。"
+      },
+      "2-4": {
+        key: "lab",
+        title: "說法 B：實驗意外",
+        text: "另一種解讀認為，氰化物中毒也可能與意外接觸化學物質有關。"
+      },
+      "5-1": {
+        key: "conspiracy",
+        title: "說法 C：陰謀論",
+        text: "更陰暗的說法認為他因掌握戰時機密而遭謀殺，但這缺乏有力證據。"
+      }
+    };
+
+    function t() {
+      return uiText[currentLang];
+    }
+
+    function activeClueFiles() {
+      return currentLang === "zh" ? clueFilesZh : clueFiles;
+    }
+
+    const dilemmas = [
+      {
+        title: "The Bombe and Bureaucracy",
+        scenario: "At Bletchley Park, you are working on the Bombe, a machine that could make Enigma codebreaking faster. Your work is urgent, but limited staff, scarce materials, and official bureaucracy slow the machine. Time is running out.",
+        urgent: "Do you wait for the system, or push for priority?",
+        a: {
+          label: "Wait for Official Support",
+          text: "You follow the normal chain of command and avoid a direct clash with authority.",
+          feedback: "Turing chose the riskier path. Waiting might have protected his position, but it would not have accelerated the codebreaking work."
+        },
+        b: {
+          label: "Ask for Priority",
+          text: "You risk appealing to the highest authority for resources, even if it strains relationships with officials.",
+          feedback: "This is what happened. Turing and his colleagues appealed directly to Churchill for more resources, helping the work move forward faster."
+        }
+      },
+      {
+        title: "Save Lives or Protect the Secret?",
+        scenario: "You can read some German Enigma messages. One message may warn of danger at sea. If you act too directly, Germany may realize the code has been broken and change everything.",
+        urgent: "Do you alert the military now, or protect how you know?",
+        a: {
+          label: "Alert the Military",
+          text: "You pass the intelligence to the military, hoping to prevent immediate losses.",
+          feedback: "There is no evidence that Turing faced this exact choice. The point is to feel the pressure of wartime secrecy: acting now may save lives, but it may also reveal that Enigma has been broken."
+        },
+        b: {
+          label: "Hold Back",
+          text: "You avoid obvious action so the enemy will not know the code has been broken.",
+          feedback: "There is no evidence that Turing faced this exact choice. The point is to feel the pressure of wartime secrecy: holding back protects the codebreaking advantage, but the cost remains heavy."
+        }
+      },
+      {
+        title: "Can a Machine Do More?",
+        scenario: "After the war, you want people to take computers seriously. Many people see them as calculators, but you imagine machines that can answer questions and solve problems in new ways.",
+        urgent: "Is a computer only a calculator, or can it become something more?",
+        a: {
+          label: "Just a Calculator",
+          text: "A computer is only a machine for calculation.",
+          feedback: "That view might have been easier for people to accept, but it would have narrowed Turing's idea before it could grow."
+        },
+        b: {
+          label: "More Than Calculation",
+          text: "You argue that machines can do more, including answering different kinds of questions.",
+          feedback: "In 1950, Turing moved beyond the simple question, \"Can machines think?\" He suggested that a machine's answers could force us to rethink intelligence. That idea later became an important foundation for AI."
+        }
+      },
+      {
+        title: "Law, Truth, and Identity",
+        scenario: "After a burglary investigation, your intimate relationship with another man becomes known to the police. Under British law at the time, this exposes you to prosecution for gross indecency. The state mechanism is moving against you.",
+        urgent: "Do you protect your work, or face the truth of who you are?",
+        a: {
+          label: "Conceal the Relationship",
+          text: "You hide the truth to protect your work<br />and your place in the scientific world.",
+          feedback: "Turing did not do this. It might have helped him avoid punishment, but it would have meant carrying the secret for life, with fear and vulnerability always close."
+        },
+        b: {
+          label: "Acknowledge the Truth",
+          text: "You refuse to deny the relationship, even though the law treats your identity as a crime.",
+          feedback: "Turing did not deny the relationship. Even after helping his country during the war, he was still convicted and punished."
+        }
+      }
+    ];
+
+    const dilemmasZh = [
+      {
+        title: "Bombe 與官僚制度",
+        scenario: "在布萊切利園，你正在參與 Bombe 的工作；這台機器可能讓 Enigma 解密更快。你的工作非常急迫，但人手、材料與官方層級的支援都不足，時間正在流失。",
+        urgent: "你要留在制度內等待，還是要求更高優先權？",
+        a: {
+          label: "留在制度內",
+          text: "你選擇正常程序，等候官方支援，避免與權威碰撞。",
+          feedback: "圖靈選擇了冒險。留在制度內也許可以保住工作，卻無法加快解密速度。"
+        },
+        b: {
+          label: "爭取優先權",
+          text: "你冒險向最高權力提出需求，即便會造成與其他官員關係緊張。",
+          feedback: "這是事實。圖靈與同事曾直接向邱吉爾爭取更多資源，因此讓計畫加速順利進行。"
+        }
+      },
+      {
+        title: "救人，還是保密？",
+        scenario: "你們已經能讀懂部分德軍 Enigma 訊息。一則訊息可能警告海上有危險。如果你太明顯地採取行動，德軍可能發現密碼已被破解，整個解密成果就會失效。",
+        urgent: "你要立刻使用這則訊息，還是隱藏你們已經破解密碼這件事？",
+        a: {
+          label: "立刻通知軍方",
+          text: "你選擇直接轉達情報給軍方，希望先避免眼前傷亡。",
+          feedback: "沒有史料證明圖靈做出這個選擇。這一題是為了讓你感受戰時使用機密情報時的壓力。這個選擇可能救下眼前的人，卻也可能讓敵人發現 Enigma 已被破解。"
+        },
+        b: {
+          label: "按兵不動",
+          text: "你選擇不明顯行動，避免讓敵人知道密碼已被破解。",
+          feedback: "沒有史料證明圖靈做出這個選擇。這一題是為了讓你感受戰時使用機密情報時的壓力。這個選擇保住了解密優勢，但保密背後的代價仍然沉重。"
+        }
+      },
+      {
+        title: "機器看起來能思考嗎？",
+        scenario: "戰後，你希望人們認真看待電腦。很多人只把它當成計算工具，但你認為：如果機器能像人一樣回答問題，它也許不只是計算工具。",
+        urgent: "電腦只是一台計算機嗎？還是它還能做更多事？",
+        a: {
+          label: "電腦只是工具",
+          text: "電腦就只是一台計算機器。",
+          feedback: "雖然這樣比較容易被當時的人接受，但也會讓圖靈的想法被限制在「計算工具」裡。"
+        },
+        b: {
+          label: "電腦可以解決更多問題",
+          text: "你主張機器還能做更多事情，甚至可以回答不同問題。",
+          feedback: "1950 年，圖靈不再只問「機器能思考嗎」，而是提出：如果機器能像人一樣回答問題，我們就應該重新思考智能的定義。這個想法後來成為 AI 的重要基礎。"
+        }
+      },
+      {
+        title: "法律、真相與身份",
+        scenario: "一次竊盜調查後，你與另一名男子的親密關係被警方知道。在當時英國法律下，這可能使你因 gross indecency 被起訴。國家的機器正朝你運轉。",
+        urgent: "你要保住工作，還是面對真實的自己？",
+        a: {
+          label: "隱瞞關係",
+          text: "你透過隱瞞真相來守住自己的工作，<br />以及自己在科學界的地位。",
+          feedback: "圖靈沒有這麼做。這麼做也許能夠躲過法律制裁，但卻要一輩子守著這個秘密，活在恐懼跟脆弱中。"
+        },
+        b: {
+          label: "承認真相",
+          text: "你拒絕否認這段關係，即使法律將你的身分視為犯罪。",
+          feedback: "沒錯，圖靈沒有否認這段關係。儘管他曾在戰時協助國家，他仍然被定罪並接受懲罰。"
+        }
+      }
+    ];
+
+    function activeDilemmas() {
+      return currentLang === "zh" ? dilemmasZh : dilemmas;
+    }
+
+    const theaterProgress = document.querySelector("#theater-progress");
+    const theaterTitle = document.querySelector("#theater-title");
+    const theaterScenario = document.querySelector("#theater-scenario");
+    const theaterUrgent = document.querySelector("#theater-urgent");
+    const theaterFeedback = document.querySelector("#theater-feedback");
+    const choiceA = document.querySelector("#choice-a");
+    const choiceB = document.querySelector("#choice-b");
+    const prevDilemma = document.querySelector("#prev-dilemma");
+    const reviewDilemma = document.querySelector("#review-dilemma");
+    const nextDilemma = document.querySelector("#next-dilemma");
+    const rotorAEl = document.querySelector("#rotor-a");
+    const rotorBEl = document.querySelector("#rotor-b");
+    const machineStatus = document.querySelector("#machine-status");
+    const caseConclusion = document.querySelector("#case-conclusion");
+    const unlockMeter = document.querySelector("#unlock-meter");
+    const enigmaPanel = document.querySelector(".enigma-panel");
+    const decryptReward = document.querySelector("#decrypt-reward");
+    const bombeModal = document.querySelector("#bombe-modal");
+    const bombeClose = document.querySelector("#bombe-close");
+    const bombeTrigger = document.querySelector("#turing-image");
+    const replayBombe = document.querySelector("#replay-bombe");
+    const unlocked = new Set();
+    let rewardTimer;
+    let rotorA = 1;
+    let rotorB = 1;
+    let currentDilemma = 0;
+    let bombeModalShown = false;
+    let bombeTriggerVisible = false;
+    let bombeModalTimer;
+
+    function renderDilemma() {
+      const active = activeDilemmas();
+      const item = active[currentDilemma];
+      theaterProgress.textContent = currentLang === "zh"
+        ? `${t().decision} ${currentDilemma + 1}${t().of}${active.length}`
+        : `${t().decision} ${currentDilemma + 1} ${t().of} ${active.length}`;
+      theaterTitle.textContent = item.title;
+      theaterScenario.textContent = item.scenario;
+      theaterUrgent.textContent = item.urgent;
+      choiceA.innerHTML = `<strong>${item.a.label}</strong>${item.a.text}`;
+      choiceB.innerHTML = `<strong>${item.b.label}</strong>${item.b.text}`;
+      choiceA.hidden = false;
+      choiceB.hidden = false;
+      choiceA.disabled = false;
+      choiceB.disabled = false;
+      choiceA.classList.remove("is-selected");
+      choiceB.classList.remove("is-selected");
+      theaterFeedback.hidden = true;
+      theaterFeedback.innerHTML = "";
+      prevDilemma.textContent = t().previous;
+      reviewDilemma.textContent = t().reviewChoices;
+      nextDilemma.textContent = t().next;
+      prevDilemma.disabled = currentDilemma === 0;
+      reviewDilemma.hidden = true;
+      nextDilemma.disabled = true;
+    }
+
+    function chooseDilemma(option) {
+      const item = activeDilemmas()[currentDilemma];
+      const selected = item[option];
+      const selectedButton = option === "a" ? choiceA : choiceB;
+      const hiddenButton = option === "a" ? choiceB : choiceA;
+      selectedButton.classList.add("is-selected");
+      selectedButton.disabled = true;
+      hiddenButton.hidden = true;
+      theaterFeedback.innerHTML = selected.feedback;
+      theaterFeedback.hidden = false;
+      reviewDilemma.hidden = false;
+      nextDilemma.disabled = currentDilemma === activeDilemmas().length - 1;
+    }
+
+    choiceA.addEventListener("click", () => chooseDilemma("a"));
+    choiceB.addEventListener("click", () => chooseDilemma("b"));
+
+    prevDilemma.addEventListener("click", () => {
+      currentDilemma = Math.max(0, currentDilemma - 1);
+      renderDilemma();
+    });
+
+    reviewDilemma.addEventListener("click", () => {
+      renderDilemma();
+    });
+
+    nextDilemma.addEventListener("click", () => {
+      const active = activeDilemmas();
+      currentDilemma = Math.min(active.length - 1, currentDilemma + 1);
+      renderDilemma();
+    });
+
+    function wrapRotor(value) {
+      return ((value - 1 + 5) % 5) + 1;
+    }
+
+    function updateRotors() {
+      rotorAEl.textContent = rotorA;
+      rotorBEl.textContent = rotorB;
+      const code = `${rotorA}-${rotorB}`;
+      const file = activeClueFiles()[code];
+
+      lockVisibleClues();
+
+      if (!file) {
+        machineStatus.textContent = t().signalSearching;
+        return;
+      }
+
+      const box = document.querySelector(`#clue-${file.key}`);
+      const isNewUnlock = !unlocked.has(file.key);
+      box.classList.add("is-active");
+      box.querySelector(".clue-title").textContent = file.title;
+      box.querySelector(".clue-text").textContent = file.text;
+      unlocked.add(file.key);
+      unlockMeter.textContent = `${t().filesUnlocked}: ${unlocked.size}/3`;
+      machineStatus.textContent = `[ ${t().signalAligned}: ${file.title} ]`;
+
+      if (isNewUnlock) {
+        triggerUnlockReward(unlocked.size === 3 ? t().caseCompleteReward : t().unlockReward);
+        box.classList.remove("is-revealed");
+        void box.offsetWidth;
+        box.classList.add("is-revealed");
+      }
+
+      if (unlocked.size === 3) {
+        caseConclusion.innerHTML = t().caseSolved;
+        maybeOpenBombeModal();
+      }
+    }
+
+    function maybeOpenBombeModal() {
+      if (bombeModalShown || bombeModalTimer || unlocked.size < 3 || !bombeTriggerVisible) {
+        return;
+      }
+      bombeModalTimer = window.setTimeout(() => {
+        bombeModalTimer = null;
+        if (bombeModalShown || unlocked.size < 3 || !bombeTriggerVisible) {
+          return;
+        }
+        bombeModalShown = true;
+        openBombeModal();
+      }, 2000);
+    }
+
+    function cancelBombeModalTimer() {
+      window.clearTimeout(bombeModalTimer);
+      bombeModalTimer = null;
+    }
+
+    function openBombeModal() {
+      bombeModal.hidden = false;
+      replayBombe.hidden = false;
+      void bombeModal.offsetWidth;
+      bombeModal.classList.add("is-visible");
+      bombeClose.focus();
+    }
+
+    function closeBombeModal() {
+      if (bombeModal.hidden) {
+        return;
+      }
+      bombeModal.classList.remove("is-visible");
+      window.setTimeout(() => {
+        bombeModal.hidden = true;
+      }, 160);
+    }
+
+    if ("IntersectionObserver" in window) {
+      const bombeObserver = new IntersectionObserver((entries) => {
+        bombeTriggerVisible = entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.68);
+        if (!bombeTriggerVisible) {
+          cancelBombeModalTimer();
+        }
+        maybeOpenBombeModal();
+      }, {
+        threshold: [0, 0.68]
+      });
+      bombeObserver.observe(bombeTrigger);
+    } else {
+      window.addEventListener("scroll", () => {
+        const rect = bombeTrigger.getBoundingClientRect();
+        bombeTriggerVisible = rect.top < window.innerHeight * 0.35 && rect.bottom > window.innerHeight * 0.2;
+        if (!bombeTriggerVisible) {
+          cancelBombeModalTimer();
+        }
+        maybeOpenBombeModal();
+      }, { passive: true });
+    }
+
+    bombeClose.addEventListener("click", closeBombeModal);
+
+    replayBombe.addEventListener("click", () => {
+      cancelBombeModalTimer();
+      bombeModalShown = true;
+      openBombeModal();
+    });
+
+    bombeModal.addEventListener("click", (event) => {
+      if (event.target === bombeModal) {
+        closeBombeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !bombeModal.hidden) {
+        closeBombeModal();
+      }
+    });
+
+    function triggerUnlockReward(message) {
+      window.clearTimeout(rewardTimer);
+      decryptReward.textContent = message;
+      decryptReward.classList.remove("is-visible");
+      enigmaPanel.classList.remove("is-unlocked");
+      void decryptReward.offsetWidth;
+      decryptReward.classList.add("is-visible");
+      enigmaPanel.classList.add("is-unlocked");
+      rewardTimer = window.setTimeout(() => {
+        decryptReward.classList.remove("is-visible");
+        enigmaPanel.classList.remove("is-unlocked");
+      }, 860);
+    }
+
+    document.querySelectorAll(".rotor-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        const delta = Number(button.dataset.delta);
+        if (button.dataset.rotor === "a") {
+          rotorA = wrapRotor(rotorA + delta);
+        } else {
+          rotorB = wrapRotor(rotorB + delta);
+        }
+        updateRotors();
+      });
+    });
+
+    document.querySelector("#reset-rotors").addEventListener("click", () => {
+      rotorA = 1;
+      rotorB = 1;
+      unlocked.clear();
+      bombeModalShown = false;
+      replayBombe.hidden = true;
+      cancelBombeModalTimer();
+      closeBombeModal();
+      lockVisibleClues();
+      unlockMeter.textContent = `${t().filesUnlocked}: 0/3`;
+      caseConclusion.innerHTML = t().caseStatus;
+      updateRotors();
+    });
+
+    function lockVisibleClues() {
+      Object.keys(activeClueFiles()).forEach((code) => {
+        const file = activeClueFiles()[code];
+        const box = document.querySelector(`#clue-${file.key}`);
+        box.classList.remove("is-active");
+        box.classList.remove("is-revealed");
+      });
+      resetClueText();
+    }
+
+    function resetClueText() {
+      document.querySelector("#clue-apple .clue-title").textContent = t().locked.apple[0];
+      document.querySelector("#clue-apple .clue-text").textContent = t().locked.apple[1];
+      document.querySelector("#clue-lab .clue-title").textContent = t().locked.lab[0];
+      document.querySelector("#clue-lab .clue-text").textContent = t().locked.lab[1];
+      document.querySelector("#clue-conspiracy .clue-title").textContent = t().locked.conspiracy[0];
+      document.querySelector("#clue-conspiracy .clue-text").textContent = t().locked.conspiracy[1];
+    }
+
+    function resetUnlockedFiles() {
+      unlocked.clear();
+      bombeModalShown = false;
+      replayBombe.hidden = true;
+      cancelBombeModalTimer();
+      closeBombeModal();
+      lockVisibleClues();
+      caseConclusion.innerHTML = t().caseStatus;
+      unlockMeter.textContent = `${t().filesUnlocked}: 0/3`;
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = t().docLang;
+      document.querySelector("#lang-en").classList.toggle("is-active", lang === "en");
+      document.querySelector("#lang-zh").classList.toggle("is-active", lang === "zh");
+
+      document.querySelector(".eyebrow").textContent = t().heroEyebrow;
+      document.querySelector("h1").textContent = t().heroTitle;
+      document.querySelector(".hero-subtitle").textContent = t().heroSubtitle;
+      document.querySelector(".hero-copy").textContent = t().heroCopy;
+      document.querySelector("#focus-one").textContent = t().focusSummary[0];
+      document.querySelector("#focus-two").textContent = t().focusSummary[1];
+      document.querySelector(".start-link").textContent = t().start;
+      document.querySelector(".start-hint").textContent = t().startHint;
+      document.querySelector(".caption").textContent = t().caption;
+
+      document.querySelector("#background h2").textContent = t().backgroundTitle;
+      document.querySelector("#background .lede").textContent = t().backgroundLede;
+      currentDilemma = 0;
+      renderDilemma();
+
+      document.querySelector("#life h2").textContent = t().lifeTitle;
+      document.querySelector("#life .lede").textContent = t().lifeLede;
+      Object.entries(t().cards).forEach(([key, values]) => {
+        const card = document.querySelector(`.timeline-card[data-story="${key}"]`);
+        card.querySelector(".timeline-date").textContent = values[0];
+        card.querySelector("h3").textContent = values[1];
+        card.querySelector("p").textContent = values[2];
+      });
+
+      document.querySelector("#game h2").textContent = t().gameTitle;
+      document.querySelector("#game .lede").innerHTML = t().gameLede
+        .map((line) => `<span class="lede-line">${line}</span>`)
+        .join("");
+      document.querySelector("#case-file-label").textContent = t().caseFileLabel;
+      decryptReward.textContent = t().unlockReward;
+      document.querySelector("#bombe-eyebrow").textContent = t().bombeEyebrow;
+      document.querySelector("#bombe-title").textContent = t().bombeTitle;
+      const bombeText = document.querySelector("#bombe-text");
+      if (Array.isArray(t().bombeText)) {
+        bombeText.innerHTML = t().bombeText
+          .map((line) => `<span class="lede-line">${line}</span>`)
+          .join("");
+      } else {
+        bombeText.textContent = t().bombeText;
+      }
+      document.querySelector(".enigma-panel h3").textContent = t().rotorSettings;
+      document.querySelector(".enigma-panel .source-note").textContent = t().rotorHint;
+      document.querySelectorAll(".rotor-label")[0].textContent = t().rotorOne;
+      document.querySelectorAll(".rotor-label")[1].textContent = t().rotorTwo;
+      document.querySelector("#reset-rotors").textContent = t().resetRotors;
+
+      document.querySelector("#conclusion h2").textContent = t().conclusionTitle;
+      document.querySelector("#conclusion .lede").textContent = t().conclusionLede;
+      document.querySelector("#report-label").textContent = t().reportLabel;
+      document.querySelector("#conclusion-seal").innerHTML = t().conclusionSeal
+        .map((item) => `<li>${item}</li>`)
+        .join("");
+      const factIds = ["date", "place", "record", "apple", "accident", "pressure"];
+      factIds.forEach((id, index) => {
+        document.querySelector(`#fact-${id}-label`).textContent = t().conclusionFacts[index][0];
+        document.querySelector(`#fact-${id}-value`).textContent = t().conclusionFacts[index][1];
+      });
+      document.querySelector("#conclusion-p1").textContent = t().conclusionParagraphs[0];
+      document.querySelector("#conclusion-p2").textContent = t().conclusionParagraphs[1];
+      document.querySelector("#conclusion-p3").textContent = t().conclusionParagraphs[2];
+      const conclusionLine = document.querySelector("#conclusion-line");
+      conclusionLine.textContent = t().conclusionLine;
+      conclusionLine.hidden = !t().conclusionLine;
+      document.querySelector("#interlude-title").textContent = t().interludeTitle;
+      document.querySelector("#interlude-copy").textContent = t().interludeCopy;
+      replayBombe.textContent = t().replayBombe;
+
+      document.querySelector("#sources h2").textContent = t().sourcesTitle;
+      document.querySelector("#sources-lede-note").textContent = t().sourcesLede;
+      document.querySelector("#source-image-note").textContent = t().sourceNote;
+      document.querySelector("footer").textContent = t().footer;
+
+      resetUnlockedFiles();
+      unlockMeter.textContent = `${t().filesUnlocked}: 0/3`;
+      updateRotors();
+    }
+
+    document.querySelector("#lang-en").addEventListener("click", () => applyLanguage("en"));
+    document.querySelector("#lang-zh").addEventListener("click", () => applyLanguage("zh"));
+
+    applyLanguage("en");
+  </script>
+</body>
+</html>
